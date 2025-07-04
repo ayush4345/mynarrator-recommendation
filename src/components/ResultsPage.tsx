@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 
 interface ResultsPageProps {
   score: string;
+  ceoAnswer: string;
+  interestAnswer: string;
   onJoinWaitlist: () => void;
 }
 
@@ -89,7 +91,23 @@ const personalityExemplarMapping: Record<string, {global: string[], indian: stri
   },
 };
 
-const ResultsPage = ({ score, onJoinWaitlist }: ResultsPageProps) => {
+const ResultsPage = ({ score, ceoAnswer, interestAnswer, onJoinWaitlist }: ResultsPageProps) => {
+  // Add CSS for gradient text
+  React.useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .text-gradient-pill {
+        background: linear-gradient(90deg, #00bfff, #ff00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
   // Get narratives and exemplars for the personality trait
   const narratives = personalityNarrativeMapping[score] || [];
   const exemplars = personalityExemplarMapping[score] || { global: [], indian: "" };
@@ -117,12 +135,49 @@ const ResultsPage = ({ score, onJoinWaitlist }: ResultsPageProps) => {
     return emojiMap[trait] || "✨";
   };
   
+  // Parse special answers for display
+  const parseSpecialAnswer = (answer: string) => {
+    if (!answer) return [];
+    
+    // If the answer contains multiple recommendations separated by '/', split them
+    if (answer.includes('/')) {
+      return answer.split('/').map(item => item.trim());
+    }
+    
+    // Otherwise return as a single item array
+    return [answer.trim()];
+  };
+  
+  const ceoRecommendations = parseSpecialAnswer(ceoAnswer);
+  const interestRecommendations = parseSpecialAnswer(interestAnswer);
+  
+  // Combine all recommendations and remove duplicates
+  const getAllUniqueRecommendations = () => {
+    // Start with narratives from personality trait
+    const allRecommendations = [...narratives];
+    
+    // Add CEO recommendations
+    if (ceoRecommendations) {
+      allRecommendations.push(...ceoRecommendations);
+    }
+    
+    // Add interest recommendations
+    if (interestRecommendations) {
+      allRecommendations.push(...interestRecommendations);
+    }
+    
+    // Remove duplicates and empty strings
+    return [...new Set(allRecommendations)].filter(rec => rec.toUpperCase().trim() !== '');
+  };
+  
+  const uniqueRecommendations = getAllUniqueRecommendations();
+  
   const resultData = {
     title: `Your Personality Trait: ${score}`,
     emoji: getEmoji(score),
     bgColor: "bg-gray-800",
     textColor: "text-[#00bfff]",
-    subtext: "Based on your answers, we've identified your personality trait. Check out the narratives that match your personality!"
+    subtext: "Based on your answers, we've identified your personality trait, secret CEO identity, and top interests. Check out the narratives that match your personality!"
   };
 
   return (
@@ -155,13 +210,13 @@ const ResultsPage = ({ score, onJoinWaitlist }: ResultsPageProps) => {
         {resultData.subtext}
       </p>
 
-      {/* Narratives */}
+      {/* Combined Unique Recommendations */}
       <div className="mb-6">
         <h3 className="text-xl font-semibold mb-2 text-white">Your Recommended Narratives:</h3>
         <div className="flex flex-wrap gap-2 justify-center">
-          {narratives.map((narrative, index) => (
-            <span key={index} className="bg-gray-800 text-[#ff00ff] border border-gray-700 px-3 py-1 rounded-full text-sm shadow-[0_0_10px_rgba(255,0,255,0.3)]">
-              {narrative}
+          {uniqueRecommendations.map((recommendation, index) => (
+            <span key={index} className="bg-gray-800 text-gradient-pill border border-gray-700 px-3 py-1 rounded-full text-sm shadow-[0_0_10px_rgba(255,0,255,0.3)]">
+              {recommendation.toUpperCase()}
             </span>
           ))}
         </div>

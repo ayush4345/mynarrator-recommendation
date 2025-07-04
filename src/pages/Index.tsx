@@ -13,14 +13,18 @@ type QuizState = 'landing' | 'quiz' | 'results' | 'waitlist' | 'terms';
 const Index = () => {
   const [currentState, setCurrentState] = useState<QuizState>('landing');
   const [personalityResult, setPersonalityResult] = useState<string>('');
+  const [ceoAnswer, setCeoAnswer] = useState<string>('');
+  const [interestAnswer, setInterestAnswer] = useState<string>('');
 
   const handleStartQuiz = () => {
     setCurrentState('quiz');
     setPersonalityResult('');
   };
 
-  const handleQuizComplete = (result: string) => {
-    setPersonalityResult(result);
+  const handleQuizComplete = (personalityTrait: string, ceoAnswer: string, interestAnswer: string) => {
+    setPersonalityResult(personalityTrait);
+    setCeoAnswer(ceoAnswer);
+    setInterestAnswer(interestAnswer);
     setCurrentState('results');
   };
 
@@ -33,8 +37,8 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-hidden" style={{ backgroundColor: '#0a0a0a' }}>
-      <div className="transition-all duration-500 ease-in-out" style={{ backgroundColor: '#0a0a0a' }}>
+    <div className="min-h-screen overflow-hidden" style={{ backgroundColor: '#000000' }}>
+      <div className="transition-all duration-500 ease-in-out" style={{ backgroundColor: '#000000' }}>
         {currentState === 'landing' && (
           <LandingPage onStartQuiz={handleStartQuiz} />
         )}
@@ -42,7 +46,7 @@ const Index = () => {
           <QuizPage onQuizComplete={handleQuizComplete} />
         )}
         {currentState === 'results' && (
-          <ResultsPage score={personalityResult} onJoinWaitlist={handleJoinWaitlist} />
+          <ResultsPage score={personalityResult} ceoAnswer={ceoAnswer} interestAnswer={interestAnswer} onJoinWaitlist={handleJoinWaitlist} />
         )}
         {currentState === 'waitlist' && (
           <WaitlistForm onSubmit={handleWaitlistSubmit} />

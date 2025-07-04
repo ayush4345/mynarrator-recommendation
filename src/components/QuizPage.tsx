@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Progress } from '@/components/ui/progress';
 
 interface QuizPageProps {
-  onQuizComplete: (result: string) => void;
+  onQuizComplete: (personalityTrait: string, ceoAnswer: string, interestAnswer: string) => void;
 }
 
 const questions = [
@@ -56,6 +56,52 @@ const questions = [
       { label: "C. Bringing people together", points: "C" },
       { label: "D. Plotting out a clear roadmap", points: "D" }
     ]
+  },
+  {
+    id: 6,
+    question: "If you could (sarcastically) run any \"company\" based on your secret hobby, which absurd CEO title would you rock?",
+    options: [
+      { label: "A. the Emergency Dance-Floor Patrol", points: "Dancer / The Mindful Adventurer" },
+      { label: "B. Guitar-Solo Karaoke Nights", points: "Music / The Modern Influencer" },
+      { label: "C. the Plush-Toy Diagnosis Department", points: "Medical Pro / Bumbling My Life" },
+      { label: "D. Sneaky Ninja Security Solutions", points: "Armed Defense Pro / The Shuttlers" },
+      { label: "E. the Abstract Finger-Painting Institute", points: "Artist / Mysterious & Hot" },
+      { label: "F. Candy-Futures Trading LLC", points: "Trader / Wanna Be Unicorn" },
+      { label: "G. Expert Eye-Roll Consultancy", points: "Sarcasm / The Sarcastic Rizzler" },
+      { label: "H. the Pro-Level Couch Gaming League", points: "Gamer by Profession" },
+      { label: "I. Home-Brew Beer Hangover Management", points: "Friday Night Beer" },
+      { label: "J. GPS-Optional Road Trips Inc.", points: "Road Royalty / The Mindful Adventurer" },
+      { label: "K. Fuel-Injected Coffee Addiction Co.", points: "Surviving on Caffeine" },
+      { label: "L. Extreme Sweat-Equity Gyms", points: "Gym & Fitness Freak" },
+      { label: "M. Hashtag Manipulation Technologies", points: "The Modern Influencer" },
+      { label: "N. Imaginary Unicorn Startup Factory", points: "Wanna Be Unicorn / Technologist on Toes" },
+      { label: "O. AI-Generated Job Titles Unlimited", points: "Technologist on Toes" }
+    ]
+  },
+  {
+    id: 7,
+    question: "What are you most passionate about? (Select your top interest)",
+    options: [
+      { label: "1. Off-Road Riding & Road Trips", points: "Road Royalty / The Mindful Adventurer" },
+      { label: "2. Mindful Travel & Solo Retreats", points: "The Mindful Adventurer / Bumbling My Life" },
+      { label: "3. Coffee Culture & Café Hopping", points: "Surviving on Caffeine / The Modern Influencer" },
+      { label: "4. Gym Workouts & Fitness Challenges", points: "Gym & Fitness Freak / The Ultimate Husband Material" },
+      { label: "5. Gaming & eSports Tournaments", points: "Gamer by Profession / Technologist on Toes" },
+      { label: "6. Startup Culture & Unicorn Hunting", points: "Wanna Be Unicorn / Technologist on Toes" },
+      { label: "7. Social Media & Influencer Trends", points: "The Modern Influencer / The Shuttlers" },
+      { label: "8. Sardonic Humor & Memes", points: "The Sarcastic Rizzler / Bumbling My Life" },
+      { label: "9. Craft Cocktails & Nightlife", points: "Friday Night Beer / The Modern Influencer" },
+      { label: "10. Mystery Novels & Film Noir", points: "Mysterious & Hot / Bumbling My Life" },
+      { label: "11. Every-day Anecdotes & Journaling", points: "Bumbling My Life / The Mindful Adventurer" },
+      { label: "12. Tech Gadgets & Wearables", points: "Technologist on Toes / Wanna Be Unicorn" },
+      { label: "13. Community Events & Pop-Up Meetups", points: "The Shuttlers / The Modern Influencer" },
+      { label: "14. Choreography & Freestyle Dancing", points: "Dancer / The Mindful Adventurer" },
+      { label: "15. Beat-Making & Underground DJ Nights", points: "Music / The Modern Influencer" },
+      { label: "16. First-Aid Drills & Medical Role-Play", points: "Medical Pro / Bumbling My Life" },
+      { label: "17. Tactical Gear Collecting & Strategy Sim Games", points: "Armed Defense Pro / The Shuttlers" },
+      { label: "18. Urban Sketching & Pop-Up Art Jams", points: "Artist / Mysterious & Hot" },
+      { label: "19. Paper-Trading & Market Prediction Challenges", points: "Trader / Wanna Be Unicorn" }
+    ]
   }
 ];
 
@@ -96,10 +142,22 @@ const QuizPage = ({ onQuizComplete }: QuizPageProps) => {
   };
   
   const calculateResult = (finalAnswers: Record<number, string>) => {
-    // Count the frequency of each answer type
+    // Separate the special questions' answers
+    const ceoQuestionAnswer = finalAnswers[5]; // Question with id 6 is at index 5
+    const interestQuestionAnswer = finalAnswers[6]; // Question with id 7 is at index 6
+    
+    // Process the first 5 questions (personality quiz)
+    const personalityAnswers: Record<number, string> = {};
+    for (let i = 0; i < 5; i++) {
+      if (i in finalAnswers) {
+        personalityAnswers[i] = finalAnswers[i];
+      }
+    }
+    
+    // Count the frequency of each answer type for personality questions
     const answerCounts: Record<string, number> = { A: 0, B: 0, C: 0, D: 0 };
     
-    Object.values(finalAnswers).forEach((answer) => {
+    Object.values(personalityAnswers).forEach((answer) => {
       if (answer in answerCounts) {
         answerCounts[answer]++;
       }
@@ -120,9 +178,10 @@ const QuizPage = ({ onQuizComplete }: QuizPageProps) => {
     const potentialTraits = personalityTraitMapping[dominantType] || [];
     
     // Select a random trait from the potential traits
-    const selectedTrait = potentialTraits[Math.floor(Math.random() * potentialTraits.length)];
+    const personalityTrait = potentialTraits[Math.floor(Math.random() * potentialTraits.length)];
     
-    onQuizComplete(selectedTrait);
+    // Pass the personality trait, CEO question answer, and interest answer to the ResultsPage
+    onQuizComplete(personalityTrait, ceoQuestionAnswer || '', interestQuestionAnswer || '');
   };
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
@@ -150,7 +209,7 @@ const QuizPage = ({ onQuizComplete }: QuizPageProps) => {
         </h2>
 
         {/* Options */}
-        <div className="space-y-3">
+        <div className={`space-y-3 ${currentQuestion === 5 || currentQuestion === 6 ? 'max-h-[60vh] overflow-y-auto pr-2' : ''}`}>
           {questions[currentQuestion].options.map((option, index) => (
             <button
               key={index}
