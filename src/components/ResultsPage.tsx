@@ -173,30 +173,34 @@ const ResultsPage = ({ score, ceoAnswer, interestAnswer, onJoinWaitlist }: Resul
   const uniqueRecommendations = getAllUniqueRecommendations();
   
   const resultData = {
-    title: `Your Personality Trait: ${score}`,
+    title: `YOUR PERSONALITY TRAIT: ${score.toUpperCase()}`,
     emoji: getEmoji(score),
-    bgColor: "bg-gray-800",
-    textColor: "text-[#00bfff]",
+    bgColor: "bg-[#4CAF50]",
+    textColor: "text-white",
     subtext: "Based on your answers, we've identified your personality trait, secret CEO identity, and top interests. Check out the narratives that match your personality!"
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center px-6 text-center relative" style={{ backgroundColor: '#000000' }}>
-      {/* Animated background glow effects */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#ff00ff] opacity-10 blur-[100px]"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-[#00bfff] opacity-10 blur-[100px]"></div>
+    <div className="min-h-screen flex flex-col justify-center items-center px-6 text-center relative" style={{ backgroundColor: '#121212' }}>
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#4CAF50] to-white mb-2">MY NARRATIVE</h1>
+        <p className="text-[#4CAF50] text-lg font-medium">WEAR YOUR PERSONALITY</p>
       </div>
+      
+      {/* Green accent element */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#4CAF50] to-white"></div>
+      
       {/* Personality Trait Display */}
       <div className="mb-8">
-        <div className={`inline-flex items-center px-6 py-3 rounded-full ${resultData.bgColor} ${resultData.textColor} text-lg font-semibold`}>
+        <div className={`inline-flex items-center px-6 py-3 ${resultData.bgColor} ${resultData.textColor} text-lg font-semibold uppercase`}>
           <span className="text-2xl mr-2">{resultData.emoji}</span>
-          {score}
+          {score.toUpperCase()}
         </div>
       </div>
 
       {/* Result Title */}
-      <h1 className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight max-w-3xl bg-clip-text text-transparent bg-gradient-to-r from-[#ff00ff] to-[#00bfff]">
+      <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#4CAF50] to-white mb-8 leading-tight max-w-3xl uppercase">
         {resultData.title}
       </h1>
 
@@ -212,10 +216,10 @@ const ResultsPage = ({ score, ceoAnswer, interestAnswer, onJoinWaitlist }: Resul
 
       {/* Combined Unique Recommendations */}
       <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2 text-white">Your Recommended Narratives:</h3>
-        <div className="flex flex-wrap gap-2 justify-center">
+        <h3 className="text-xl font-semibold mb-4 text-white uppercase">Your Recommended Narratives:</h3>
+        <div className="flex flex-wrap gap-3 justify-center">
           {uniqueRecommendations.map((recommendation, index) => (
-            <span key={index} className="bg-gray-800 text-gradient-pill border border-gray-700 px-3 py-1 rounded-full text-sm shadow-[0_0_10px_rgba(255,0,255,0.3)]">
+            <span key={index} className="bg-gradient-to-r from-[#4CAF50] to-[#81C784] text-white px-4 py-2 text-sm font-medium rounded-md shadow-md hover:shadow-lg hover:translate-y-[-2px] transition-all duration-300 cursor-pointer">
               {recommendation.toUpperCase()}
             </span>
           ))}
@@ -224,10 +228,14 @@ const ResultsPage = ({ score, ceoAnswer, interestAnswer, onJoinWaitlist }: Resul
 
       {/* Exemplars */}
       <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-2 text-white">People with similar traits:</h3>
-        <p className="text-gray-300"><strong className="text-[#00bfff]">Global Examples:</strong> {exemplars.global.join(", ")}</p>
-        <p className="text-gray-300"><strong className="text-[#00bfff]">Indian Example:</strong> {exemplars.indian}</p>
+        <h3 className="text-xl font-semibold mb-4 text-white uppercase">People with similar traits:</h3>
+        <div className="bg-gray-800 p-4 border border-gray-700">
+          <p className="text-gray-300 mb-2"><strong className="text-[#4CAF50]">Global Examples:</strong> {exemplars.global.join(", ")}</p>
+          <p className="text-gray-300"><strong className="text-[#4CAF50]">Indian Example:</strong> {exemplars.indian}</p>
+        </div>
       </div>
+      
+      {/* No retake quiz button as requested */}
     </div>
   );
 };

@@ -102,6 +102,22 @@ const questions = [
       { label: "18. Urban Sketching & Pop-Up Art Jams", points: "Artist / Mysterious & Hot" },
       { label: "19. Paper-Trading & Market Prediction Challenges", points: "Trader / Wanna Be Unicorn" }
     ]
+  },
+  {
+    id: 8,
+    question: "If your weekend had a theme-song music video, what would it look like?",
+    options: [
+      { label: "A. Dust-kicking ATV races through canyons", points: "Road Royalty / The Mindful Adventurer" },
+      { label: "B. A neon-lit hackathon montage", points: "Technologist on Toes / Wanna Be Unicorn" },
+      { label: "C. A caffeine-fueled café montage with latte art slow-mo", points: "Surviving on Caffeine / The Modern Influencer" },
+      { label: "D. A gritty gym montage intercut with shuttle smashes", points: "Gym & Fitness Freak / Shuttler's Arena" },
+      { label: "E. A high-stakes trading floor with ticker-tape confetti", points: "Genetically Finoholic" },
+      { label: "F. A shadowy film-noir chase through rain-slicked streets", points: "Mysterious & Hot / Bumbling My Life" },
+      { label: "G. A dance-battle flashmob in a warehouse rave", points: "Live to Dance / Music Therapy" },
+      { label: "H. A sarcastic stand-up routine at an empty comedy club", points: "The Sarcastic Rizzler / The Modern Influencer" },
+      { label: "I. A battlefield-style first-aid tent under mortar fire", points: "Medico on Duty / Armed Patriot" },
+      { label: "J. A pastel art-studio time-lapse of a canvas explosion", points: "Born Artist / The Sarcastic Rizzler" }
+    ]
   }
 ];
 
@@ -124,10 +140,8 @@ const QuizPage = ({ onQuizComplete }: QuizPageProps) => {
 
   const handleOptionSelect = (points: string, index: number) => {
     setSelectedOption(index);
-    
-    // Update answers with the selected option
-    const newAnswers = { ...answers, [currentQuestion]: points };
-    setAnswers(newAnswers);
+    const updatedAnswers = { ...answers, [currentQuestion]: points };
+    setAnswers(updatedAnswers);
     
     // Auto-advance after a short delay
     setTimeout(() => {
@@ -135,24 +149,33 @@ const QuizPage = ({ onQuizComplete }: QuizPageProps) => {
         setCurrentQuestion(currentQuestion + 1);
         setSelectedOption(null);
       } else {
-        // Calculate personality result
-        calculateResult(newAnswers);
+        // Calculate personality result on the last question
+        calculateResult(updatedAnswers);
       }
     }, 500);
   };
   
+  // No handleNextQuestion function needed - auto-advancing
+  
   const calculateResult = (finalAnswers: Record<number, string>) => {
-    // Separate the special questions' answers
-    const ceoQuestionAnswer = finalAnswers[5]; // Question with id 6 is at index 5
-    const interestQuestionAnswer = finalAnswers[6]; // Question with id 7 is at index 6
+    // First 5 questions (1-5) determine personality trait
+    // Last 3 questions (6-8) are used for narrative recommendations
     
-    // Process the first 5 questions (personality quiz)
+    // Extract narrative recommendation questions (questions 6, 7, 8)
+    const ceoQuestionAnswer = finalAnswers[5]; // Question 6 (CEO question) is at index 5
+    const interestQuestionAnswer = finalAnswers[6]; // Question 7 (interests) is at index 6
+    const weekendThemeAnswer = finalAnswers[7]; // Question 8 (weekend theme) is at index 7
+    
+    // Process the first 5 questions for personality trait calculation
     const personalityAnswers: Record<number, string> = {};
-    for (let i = 0; i < 5; i++) {
+    // Use only questions 1-5 for personality calculation (indices 0-4)
+    const personalityQuestionIndices = [0, 1, 2, 3, 4];
+    
+    personalityQuestionIndices.forEach(i => {
       if (i in finalAnswers) {
         personalityAnswers[i] = finalAnswers[i];
       }
-    }
+    })
     
     // Count the frequency of each answer type for personality questions
     const answerCounts: Record<string, number> = { A: 0, B: 0, C: 0, D: 0 };
@@ -180,53 +203,65 @@ const QuizPage = ({ onQuizComplete }: QuizPageProps) => {
     // Select a random trait from the potential traits
     const personalityTrait = potentialTraits[Math.floor(Math.random() * potentialTraits.length)];
     
-    // Pass the personality trait, CEO question answer, and interest answer to the ResultsPage
-    onQuizComplete(personalityTrait, ceoQuestionAnswer || '', interestQuestionAnswer || '');
+    // Combine the weekend theme song answer with other special answers
+    const combinedInterests = [
+      interestQuestionAnswer || '',
+      weekendThemeAnswer || ''
+    ].filter(Boolean).join('/');
+    
+    // Pass the personality trait, CEO question answer, and combined interest answers to the ResultsPage
+    onQuizComplete(personalityTrait, ceoQuestionAnswer || '', combinedInterests);
   };
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   return (
-    <div className="h-screen flex flex-col justify-center px-6 max-w-2xl mx-auto relative" style={{ backgroundColor: '#000000' }}>
-      {/* Animated background glow effects */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#ff00ff] opacity-10 blur-[100px]"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-[#00bfff] opacity-10 blur-[100px]"></div>
+    <div className="min-h-screen flex flex-col justify-center px-6 max-w-2xl mx-auto relative" style={{ backgroundColor: '#121212' }}>
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#4CAF50] to-white mb-2">FIND YOUR NARRATIVE</h1>
+        <p className="text-[#4CAF50] text-lg font-medium">WEAR YOUR PERSONALITY</p>
       </div>
+      
+      {/* Green accent element */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#4CAF50] to-white"></div>
+      
       {/* Progress Bar */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-gray-300">Question {currentQuestion + 1} of {questions.length}</span>
-          <span className="text-sm text-gray-300">{Math.round(progress)}%</span>
+          <span className="text-sm text-gray-300 font-medium">Question {currentQuestion + 1} of {questions.length}</span>
+          <span className="text-sm text-gray-300 font-medium">{Math.round(progress)}%</span>
         </div>
-        <Progress value={progress} className="h-2 bg-gray-800" indicatorClassName="bg-gradient-to-r from-[#ff00ff] to-[#00bfff]" />
+        <Progress value={progress} className="h-2 bg-gray-800" indicatorClassName="bg-[#4CAF50]" />
       </div>
 
       {/* Question */}
-      <div className="bg-gray-900 rounded-lg p-8 border border-gray-800 shadow-[0_0_15px_rgba(255,0,255,0.3)]">
-        <h2 className="text-2xl font-bold text-white mb-6">
+      <div className="bg-gray-900 rounded-lg p-8 border border-gray-800 shadow-md">
+        <h2 className="text-2xl font-bold text-white mb-6 uppercase">
           {questions[currentQuestion].question}
         </h2>
 
         {/* Options */}
-        <div className={`space-y-3 ${currentQuestion === 5 || currentQuestion === 6 ? 'max-h-[60vh] overflow-y-auto pr-2' : ''}`}>
+        <div className={`space-y-3 ${currentQuestion === 6 || currentQuestion === 7 || currentQuestion === 8 ? 'max-h-[60vh] overflow-y-auto pr-2' : ''}`}>
           {questions[currentQuestion].options.map((option, index) => (
             <button
               key={index}
               onClick={() => handleOptionSelect(option.points, index)}
               disabled={selectedOption !== null}
-              className={`w-full text-left p-4 rounded-lg border transition-all duration-200 ${
+              className={`w-full text-left p-4 rounded-md shadow-md mb-2 transition-all duration-300 ${
                 selectedOption === index
-                  ? 'border-[#00bfff] bg-gray-800 text-white shadow-[0_0_10px_rgba(0,191,255,0.5)]'
+                  ? 'bg-gradient-to-r from-[#4CAF50] to-[#81C784] text-white shadow-lg transform scale-[1.02]'
                   : selectedOption !== null
-                  ? 'border-gray-700 opacity-50 cursor-not-allowed text-gray-400'
-                  : 'border-gray-700 hover:border-[#ff00ff] hover:bg-gray-800 text-gray-300'
+                  ? 'bg-gray-800 opacity-50 cursor-not-allowed text-gray-400'
+                  : 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:shadow-lg hover:translate-x-1'
               }`}
             >
               <span className="font-medium">{option.label}</span>
             </button>
           ))}
         </div>
+        
+        {/* No Next Button - Auto-advancing */}
       </div>
     </div>
   );

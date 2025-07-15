@@ -6,29 +6,37 @@ interface LandingPageProps {
 
 const LandingPage = ({ onStartQuiz }: LandingPageProps) => {
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 text-center relative overflow-hidden" style={{ backgroundColor: '#000000' }}>
-      <div className='w-3/4 flex flex-col items-start justify-center gap-10 min-h-screen overflow-hidden text-white'>
-        <div
-          className={cn(
-            "absolute inset-0 overflow-hidden w-3/4 h-screen",
-            "[background-size:40px_40px]",
-            "[background-image:radial-gradient(#333333_1px,transparent_1px)]",
-            "opacity-30"
-          )}
-        />
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#ff00ff97] opacity-10 blur-[100px]"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-[#00bfff90] opacity-10 blur-[100px]"></div>
+    <div className="min-h-screen flex items-center justify-center px-6 text-center relative overflow-hidden" style={{ backgroundColor: '#121212' }}>
+      {/* Header */}
+      <div className="absolute top-0 left-0 w-full py-6 px-8 flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-white">MY NARRATIVE</h1>
         </div>
-        <p className="text-[104px] text-left z-20 font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#ff00ff] to-[#00bfff]">Discover your personality</p>
-        <div className='z-20'>
-          <button
-            onClick={onStartQuiz}
-            className="px-8 py-2 cursor-pointer z-20 font-semibold uppercase bg-gradient-to-r from-[#ff00ff] to-[#00bfff] text-white transition duration-200 text-2xl rounded-md hover:opacity-90 shadow-[0_0_15px_rgba(255,0,255,0.7)]">
-            Take the Personality Quiz
-          </button>
+        <div>
+          <p className="text-[#4CAF50] font-medium">WEAR YOUR PERSONALITY</p>
         </div>
       </div>
+      
+      <div className='w-full md:w-3/4 flex flex-col items-center md:items-start justify-center gap-10 min-h-screen overflow-hidden text-white px-4'>
+        {/* Green accent element */}
+        <div className="absolute top-1/3 right-1/4 w-32 h-32 bg-[#4CAF50] opacity-20"></div>
+        
+        {/* Main content */}
+        <div className="relative z-10 text-center md:text-left">
+          <h2 className="text-4xl md:text-6xl lg:text-[80px] font-bold mb-6 uppercase bg-clip-text text-transparent bg-gradient-to-r from-[#4CAF50] to-white">Discover your narrative</h2>
+          <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">Find your personality trait and get personalized narrative recommendations that match who you are.</p>
+          <div className='z-20'>
+            <button
+              onClick={onStartQuiz}
+              className="px-10 py-4 cursor-pointer z-20 font-semibold uppercase bg-gradient-to-r from-[#4CAF50] to-[#81C784] text-white rounded-md shadow-lg hover:shadow-xl hover:translate-y-[-2px] transition-all duration-300 text-lg tracking-wider">
+              Take the Quiz
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Green accent border at bottom */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#4CAF50] to-white"></div>
     </div>
   );
 };
