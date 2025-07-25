@@ -1,0 +1,458 @@
+/* Global Styles */
+:root {
+  --primary-color: #4CAF50;
+  --primary-light: #81C784;
+  --dark-bg: #121212;
+  --gray-800: #333333;
+  --gray-700: #444444;
+  --gray-600: #555555;
+  --gray-300: #cccccc;
+  --white: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--dark-bg);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header Styles */
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 24px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--white);
+}
+
+.tagline {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* Button Styles */
+.btn {
+  display: inline-block;
+  padding: 16px 40px;
+  font-weight: 600;
+  text-transform: uppercase;
+  background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Section Styles */
+.section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Landing Page Styles */
+.landing-page {
+  text-align: center;
+}
+
+.landing-page h2 {
+  font-size: 60px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  background: linear-gradient(to right, var(--primary-color), var(--white));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  max-width: 800px;
+}
+
+.landing-page p {
+  font-size: 18px;
+  color: var(--gray-300);
+  margin-bottom: 32px;
+  max-width: 600px;
+}
+
+.accent-element {
+  position: absolute;
+  top: 33%;
+  right: 25%;
+  width: 128px;
+  height: 128px;
+  background-color: var(--primary-color);
+  opacity: 0.2;
+}
+
+.accent-border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, var(--primary-color), var(--white));
+}
+
+/* Quiz Page Styles */
+.quiz-page {
+  max-width: 768px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.quiz-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.quiz-title {
+  font-size: 32px;
+  font-weight: bold;
+  background: linear-gradient(to right, var(--primary-color), var(--white));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 8px;
+}
+
+.progress-container {
+  margin-bottom: 32px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--gray-800);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-indicator {
+  height: 100%;
+  background-color: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.question-container {
+  background-color: var(--gray-800);
+  border-radius: 8px;
+  padding: 32px;
+  border: 1px solid #444;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.question-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--white);
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.option {
+  width: 100%;
+  text-align: left;
+  padding: 16px;
+  border-radius: 4px;
+  background-color: var(--gray-800);
+  color: var(--gray-300);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.option:hover {
+  background-color: var(--gray-700);
+  transform: translateX(4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.option.selected {
+  background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+  color: var(--white);
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--gray-600);
+}
+
+/* Results Page Styles */
+.results-page {
+  text-align: center;
+}
+
+.personality-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.personality-badge .emoji {
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+.results-title {
+  font-size: 48px;
+  font-weight: bold;
+  background: linear-gradient(to right, var(--primary-color), var(--white));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 32px;
+  text-transform: uppercase;
+  max-width: 800px;
+}
+
+.results-emoji {
+  font-size: 80px;
+  margin-bottom: 32px;
+}
+
+.results-description {
+  font-size: 18px;
+  color: var(--gray-300);
+  margin-bottom: 24px;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.recommendations-container {
+  margin-bottom: 24px;
+}
+
+.recommendations-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.recommendations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.recommendation-tag {
+  background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+  color: var(--white);
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.recommendation-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.exemplars-container {
+  background-color: var(--gray-800);
+  padding: 16px;
+  border: 1px solid #444;
+  margin-bottom: 32px;
+  max-width: 600px;
+}
+
+.exemplar-text {
+  color: var(--gray-300);
+  margin-bottom: 8px;
+}
+
+.exemplar-highlight {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Waitlist Form Styles */
+.waitlist-form-container {
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 32px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-description {
+  color: #666;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.form-input.error {
+  border-color: #f44336;
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #1976d2;
+}
+
+.success-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.success-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.success-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.redirect-message {
+  color: #666;
+}
+
+/* Utility Classes */
+.hidden {
+  display: none;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .landing-page h2 {
+    font-size: 36px;
+  }
+  
+  .results-title {
+    font-size: 32px;
+  }
+  
+  .quiz-title {
+    font-size: 28px;
+  }
+  
+  .question-text {
+    font-size: 20px;
+  }
+}
